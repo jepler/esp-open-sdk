@@ -1,0 +1,48 @@
+dist: trusty
+language: bash
+cache:
+  directories:
+  - "${HOME}/persist"
+addons:
+  apt:
+    packages:
+    - make
+    - unrar-free
+    - autoconf
+    - automake
+    - libtool
+    - gcc
+    - g++
+    - gperf
+    - flex
+    - bison
+    - texinfo
+    - gawk
+    - ncurses-dev
+    - libexpat-dev
+    - python-dev
+    - python
+    - python-serial
+    - sed
+    - git
+    - unzip
+    - bash
+    - help2man
+    - wget
+    - bzip2
+script:
+- make toolchain
+- ls -l xtensa-lx106-elf/bin/
+- make STANDALONE=y
+after_success:
+- mkdir -p dist
+- tar cavf dist/xtensa-lx106-elf-standalone.tar.gz xtensa-lx106-elf
+deploy:
+  provider: releases
+  api_key:
+    secure: fw5W0SFdMtP+rTlRRMEGHhWgbN3DrOfBjXK1OblRsiotUeMxesjKBb0DflMfxT3+hqpNm7qj4l4BZ/M755dnZEE64wCCah8p8CXP0yRl5KpH27Nkfg1vLmWDkZgcSqd3UIv6GMfgZlXolWpXhPYmv/ZR0JuMJBhpkMgJs1aRDHabM34477HuOvuOujm7lbnC1+EWDvyrsK/7OL5PzDLD8f3F7G/3JI1MwpHxpof6vsDK1ao6t/TYfcy+wRQVLgda2m6xz5IERly1rAwuoQII5n9q+p0+XVuPUFKW6YKZdGFo2zIlv++JuU96uLImXAZXI5TTpVS7xckW1ODCUNPNKPww+lW4TThfnB0b6OoNcACDbQV4CbI17zQNN9Qxb3cKKbBVEhKmc1Q31ajzTQfsaXkmuoj+EWAOM6/vwQgkNfBwYQ7e2reYc3+i+IAthdbYRs1ia3yWYLPomrr1DFNyoSHnGB0IKkynfe66n4oCX9F5BMsKIAh7r0YTBjO7O7DSBqS2SsQI5twiNgU5KtXBlPfTwoH5lmydBW5DInNAr+SOXRQKJvpqVbXDxffagYxgejB+QTeTNi2IH62xeWIx2aK/9lKA2fWwoj/WcJ/X1ZP4ZdUNNnOtdgrI1MIrj85b+bgW0cuE1AdLHn9Do74OKDiG0w6LrhvTFirHOCEIo3g=
+  file: dist/xtensa-lx106-elf-standalone.tar.gz
+  skip_cleanup: true
+  on:
+    repo: jepler/esp-open-sdk
+    tags: true
